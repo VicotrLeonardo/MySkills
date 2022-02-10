@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, FlatList} from 'react-native';
 import {Button} from '../components/Button';
 import {CardHabilidade} from '../components/CardHabilidade';
+import { useSkills } from '../hooks/habilidadesContext';
 
 interface HabilidadeData {
   id: string;
@@ -16,12 +17,22 @@ export function Home() {
   );
   const [greeting, setGreeting] = useState('Bom dia');
 
-  function handleAdicionarNovaHabilidade() {
+
+    const {adicionar,skills} = useSkills()
+
+
+   adicionar({id }) {
     const data = {
-      id: String(new Date().getTime),
+      id: String(Math.random()),
       name: novaHabilidade,
     };
     setMinhasHabilidades(oldState => [...oldState, data]);
+  }
+
+  function handleDeletarHabilidade(idHabilidade: string) {
+    setMinhasHabilidades(oldState =>
+      oldState.filter(habilidade => habilidade.id !== idHabilidade),
+    );
   }
 
   useEffect(() => {
@@ -47,7 +58,10 @@ export function Home() {
           onChangeText={setNovaHabilidade}
         />
 
-        <Button onPress={handleAdicionarNovaHabilidade} />
+        <Button
+          onPress={handleAdicionarNovaHabilidade}
+          title="Adicionar Habilidade"
+        />
 
         <Text style={[styles.title, {marginVertical: 30, fontSize: 18}]}>
           Minhas Habilidades
@@ -56,7 +70,12 @@ export function Home() {
         <FlatList
           data={minhasHabilidades}
           keyExtractor={item => item.id}
-          renderItem={({item}) => <CardHabilidade habilidade={item.name} />}
+          renderItem={({item}) => (
+            <CardHabilidade
+              habilidade={item.name}
+              onPress={() => handleDeletarHabilidade(item.id)}
+            />
+          )}
         />
       </View>
     </>
