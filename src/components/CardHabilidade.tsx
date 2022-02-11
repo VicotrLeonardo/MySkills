@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -9,16 +9,25 @@ import {
 
 interface CardHabilidadeProps extends TouchableOpacityProps {
   habilidade: string;
+  idHabilidade: string;
+  handleDeletarHabilidade: (id: string) => void;
 }
 
-export function CardHabilidade({habilidade, ...rest}: CardHabilidadeProps) {
+export function CardHabilidade({
+  habilidade,
+  idHabilidade,
+  handleDeletarHabilidade,
+  ...rest
+}: CardHabilidadeProps) {
   return (
     <TouchableOpacity
       style={styles.buttonHabilidade}
       activeOpacity={0.5}
       {...rest}>
       <Text style={styles.textoHabilidade}>{habilidade}</Text>
-      <Button title="Excluir"></Button>
+      <Button
+        title="Excluir"
+        onPress={() => handleDeletarHabilidade(idHabilidade)}></Button>
     </TouchableOpacity>
   );
 }

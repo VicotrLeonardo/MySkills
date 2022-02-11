@@ -1,13 +1,18 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
-import {SkillsProvider} from './src/hooks/habilidadesContext';
+import {
+  ListaHabilidadesContext,
+  ListaHabilidadesContextProvider,
+} from './src/context/ListaHabilidadesContext';
 import {Home} from './src/pages/Home';
 
 export default function App() {
   return (
-    <SkillsProvider>
-      <StatusBar barStyle="light-content" />
-      <Home />
-    </SkillsProvider>
+    <>
+      <ListaHabilidadesContextProvider>
+        <StatusBar barStyle="light-content" />
+        <Home />
+      </ListaHabilidadesContextProvider>
+    </>
   );
 }

@@ -1,39 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, FlatList} from 'react-native';
 import {Button} from '../components/Button';
 import {CardHabilidade} from '../components/CardHabilidade';
-import { useSkills } from '../hooks/habilidadesContext';
-
-interface HabilidadeData {
-  id: string;
-  name: string;
-  date?: Date;
-}
+import {ListaHabilidadesContext} from '../context/ListaHabilidadesContext';
 
 export function Home() {
   const [novaHabilidade, setNovaHabilidade] = useState('');
-  const [minhasHabilidades, setMinhasHabilidades] = useState<HabilidadeData[]>(
-    [],
-  );
   const [greeting, setGreeting] = useState('Bom dia');
 
-
-    const {adicionar,skills} = useSkills()
-
-
-   adicionar({id }) {
-    const data = {
-      id: String(Math.random()),
-      name: novaHabilidade,
-    };
-    setMinhasHabilidades(oldState => [...oldState, data]);
-  }
-
-  function handleDeletarHabilidade(idHabilidade: string) {
-    setMinhasHabilidades(oldState =>
-      oldState.filter(habilidade => habilidade.id !== idHabilidade),
-    );
-  }
+  const {
+    minhasHabilidades,
+    handleAdicionarNovaHabilidade,
+    handleDeletarHabilidade,
+  } = useContext(ListaHabilidadesContext);
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -59,7 +38,7 @@ export function Home() {
         />
 
         <Button
-          onPress={handleAdicionarNovaHabilidade}
+          onPress={() => handleAdicionarNovaHabilidade(novaHabilidade)}
           title="Adicionar Habilidade"
         />
 
@@ -73,7 +52,8 @@ export function Home() {
           renderItem={({item}) => (
             <CardHabilidade
               habilidade={item.name}
-              onPress={() => handleDeletarHabilidade(item.id)}
+              idHabilidade={item.id}
+              handleDeletarHabilidade={handleDeletarHabilidade}
             />
           )}
         />
@@ -104,3 +84,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+
+/*
+  const [minhasHabilidades, setMinhasHabilidades] = useState<HabilidadeData[]>(
+    [],
+  );
+  function handleAdicionarNovaHabilidade() {
+    const data = {
+      id: String(Math.random()),
+      name: novaHabilidade,
+    };
+    setMinhasHabilidades(oldState => [...oldState, data]);
+  }
+
+  function handleDeletarHabilidade(idHabilidade: string) {
+    setMinhasHabilidades(oldState =>
+      oldState.filter(habilidade => habilidade.id !== idHabilidade),
+    );
+  }
+  */
